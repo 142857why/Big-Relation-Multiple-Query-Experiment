@@ -23,7 +23,7 @@ both queries shall have same number of final results as (locn, dateid, ksn) is t
 
 ### Experiment 2:
 
-Consider the following 3 queries($Q_1$, $Q_2$, $Q_3):
+Consider the following 3 queries($Q_1$, $Q_2$, $Q_3$):
 
 ```sql
 SELECT locn, dateid, ksn, rain, sum(inventoryunits)
