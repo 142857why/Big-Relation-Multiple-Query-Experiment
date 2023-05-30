@@ -2,6 +2,7 @@ backend/
 bin/
 data/
 main.dSYM/
+out/
 main
 .DS_Store
 *.o
