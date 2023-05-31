@@ -21,14 +21,14 @@ There are clearly two plans for the two queries. The 1st is to maintain both que
 both queries shall have same number of final results as (locn, dateid, ksn) is the primary key of the table.
 
 #### TODO:
-[x] Implement the first plan as 01_01.
+- [x] Implement the first plan as 01_01.
 
-[x] Implement the second plan as 01_02.
+- [x] Implement the second plan as 01_02.
 
-[x] Compare the performance of the two plans.(Interestingly to notice that with the simplified table of retailer, plan
+- [x] Compare the performance of the two plans.(Interestingly to notice that with the simplified table of retailer, plan
 02 is much faster than 01. But with the full table, plan 01 is slightly faster than 02.)
 
-[ ] Give reasoning for the performance difference.
+- [ ] Give reasoning for the performance difference.
 
 ### Experiment 2:
 
@@ -55,14 +55,14 @@ results returned shall decrease from the first query to the third query. Also no
 (locn, dateid) functions as a primary key in table Weather. 
 
 #### TODO:
-[ ] Implement the first plan as 02_01.
+- [ ] Implement the first plan as 02_01.
 
-[ ] Implement the second plan as 02_02.
+- [ ] Implement the second plan as 02_02.
 
-[ ] Implement the third plan as 02_03.
+- [ ] Implement the third plan as 02_03.
 
-[ ] Compare the performance of the three plans.
+- [ ] Compare the performance of the three plans.
 
-[ ] Give reasoning for the performance difference.
+- [ ] Give reasoning for the performance difference.
 
 ### Experiment 3:
