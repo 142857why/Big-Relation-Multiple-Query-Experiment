@@ -33,5 +33,5 @@ g++ -O3 -Wall -Wno-unused-variable -std=c++17 \
 echo "Plan 2 compilation done, starting running Plan 1 ..." && \
 ./bin/retailer/retailer_01_01_BATCH > out/retailer_01_01_BATCH$BATCH_SIZE.out && \
 echo "Plan 1 done, starting running Plan 2 ..." && \
-./bin/retailer/retailer_01_02_BATCH > out/retailer_01_02_BATCH$BATCH_SIZE.out
+./bin/retailer/retailer_01_02_BATCH > out/retailer_01_02_BATCH$BATCH_SIZE.out && \
 echo "Plan 2 done, all done!"

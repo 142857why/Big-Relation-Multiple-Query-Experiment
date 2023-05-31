@@ -46,5 +46,5 @@ echo "Plan 3 compilation done, starting running Plan 1 ..." && \
 echo "Plan 1 done, starting running Plan 2 ..." && \
 ./bin/retailer/retailer_02_02_BATCH > out/retailer_02_02_BATCH$BATCH_SIZE.out && \
 echo "Plan 2 done, starting running Plan 3 ..." && \
-./bin/retailer/retailer_02_03_BATCH > out/retailer_02_03_BATCH$BATCH_SIZE.out
+./bin/retailer/retailer_02_03_BATCH > out/retailer_02_03_BATCH$BATCH_SIZE.out && \
 echo "Plan 3 done, all done!"

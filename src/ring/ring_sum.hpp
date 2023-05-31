@@ -5,7 +5,10 @@
 #include "serialization.hpp"
 
 using namespace dbtoaster;
-
+extern int number_ring_x_ring;
+extern int number_v_x_ring;
+extern int number_ring_plus_ring;
+extern int number_lifting;
 struct RingSum {
     DOUBLE_TYPE sum;
 
@@ -18,11 +21,13 @@ struct RingSum {
     inline bool isZero() const { return sum == 0; }
 
     RingSum& operator+=(const RingSum &r) {
+        number_ring_plus_ring++;
         this->sum += r.sum;
         return *this;
     }
 
     RingSum operator*(const RingSum &other) {
+        number_ring_x_ring++;
         return RingSum(this->sum * other.sum);
     }
 
@@ -34,10 +39,12 @@ struct RingSum {
 };
 
 RingSum operator*(int alpha, const RingSum &r) {
+    number_v_x_ring++;
     return RingSum(alpha * r.sum);
 }
 
 RingSum Ulift(DOUBLE_TYPE a) {
+    number_lifting++;
     return RingSum(a);
 }
 
