@@ -16,8 +16,8 @@ FROM R
 GROUP BY locn, dateid, ksn, rain, householdunits;
 ```
 
-There are clearly two plans for the two queries. The 1st is to maintain both queries from the scratch and the
-2nd is to maintain $Q_2$ and then use it to compute $Q_1$. Note that
+There are clearly two plans for the two queries. The 1st(Plan 01) is to maintain both queries from the scratch and the
+2nd(Plan 02) is to maintain $Q_2$ and then use it to compute $Q_1$. Note that
 both queries shall have same number of final results as (locn, dateid, ksn) is the primary key of the table.
 
 #### TODO:
@@ -47,9 +47,9 @@ SELECT locn, sum(inventoryunits)
 FROM R
 GROUP BY locn;
 ```
-There might be 3 query plans to maintain all the queries. The 1st one is to maintain all the queries like a chain.
-It borrows the delta view from the previous group by query to compute the next group by query. The 2nd one is only 
-borrowing the delta view from $Q_1$ to compute $Q_2$ and $Q_3$. The third one is to maintain all
+There might be 3 query plans to maintain all the queries. The 1st one(02_01) is to maintain all the queries like a chain.
+It borrows the delta view from the previous group by query to compute the next group by query. The 2nd one(02_02) is only 
+borrowing the delta view from $Q_1$ to compute $Q_2$ and $Q_3$. The 3rd one(02_03) is to maintain all
 the queries from the scratch. Note that (locn, dateid, ksn) is the primary key of the table. And thus the number of 
 results returned shall decrease from the first query to the third query. Also note that (locn, dateid) -> rain as
 (locn, dateid) functions as a primary key in table Weather. 
