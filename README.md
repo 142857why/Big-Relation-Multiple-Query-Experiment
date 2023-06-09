@@ -55,11 +55,11 @@ results returned shall decrease from the first query to the third query. Also no
 (locn, dateid) functions as a primary key in table Weather. 
 
 #### TODO:
-- [ ] Implement the first plan as 02_01.
+- [x] Implement the first plan as 02_01.
 
-- [ ] Implement the second plan as 02_02.
+- [x] Implement the second plan as 02_02.
 
-- [ ] Implement the third plan as 02_03.
+- [x] Implement the third plan as 02_03.
 
 - [ ] Compare the performance of the three plans.
 
