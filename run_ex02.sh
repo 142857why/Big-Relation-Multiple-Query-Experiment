@@ -10,6 +10,9 @@ if [ $# -eq 0 ]
 fi
 
 ./run_backend.sh --batch -o cpp/retailer/retailer_02_01.hpp m3/retailer/retailer_02_01.m3 && \
+
+astyle --style=google --indent=spaces=4 --indent-switches --suffix=none cpp/retailer/retailer_02_01.hpp && \
+
 g++ -O3 -Wall -Wno-unused-variable -std=c++17 \
 -pedantic src/main.cpp \
 -I backend/lib \
@@ -20,7 +23,11 @@ g++ -O3 -Wall -Wno-unused-variable -std=c++17 \
 -include src/application/retailer/application_retailer.hpp \
 -o bin/retailer/retailer_02_01_BATCH && \
 echo "Plan 1 compilation done, starting Compiling Plan 2 ..." && \
+
 ./run_backend.sh --batch -o cpp/retailer/retailer_02_02.hpp m3/retailer/retailer_02_02.m3 && \
+
+astyle --style=google --indent=spaces=4 --indent-switches --suffix=none cpp/retailer/retailer_02_02.hpp && \
+
 g++ -O3 -Wall -Wno-unused-variable -std=c++17 \
 -pedantic src/main.cpp \
 -I backend/lib \
@@ -31,7 +38,11 @@ g++ -O3 -Wall -Wno-unused-variable -std=c++17 \
 -include src/application/retailer/application_retailer.hpp \
 -o bin/retailer/retailer_02_02_BATCH && \
 echo "Plan 2 compilation done, starting Compiling Plan 3 ..." && \
+
 ./run_backend.sh --batch -o cpp/retailer/retailer_02_03.hpp m3/retailer/retailer_02_03.m3 && \
+
+astyle --style=google --indent=spaces=4 --indent-switches --suffix=none cpp/retailer/retailer_02_03.hpp && \
+
 g++ -O3 -Wall -Wno-unused-variable -std=c++17 \
 -pedantic src/main.cpp \
 -I backend/lib \
@@ -42,9 +53,12 @@ g++ -O3 -Wall -Wno-unused-variable -std=c++17 \
 -include src/application/retailer/application_retailer.hpp \
 -o bin/retailer/retailer_02_03_BATCH && \
 echo "Plan 3 compilation done, starting running Plan 1 ..." && \
-#./bin/retailer/retailer_02_01_BATCH > out/retailer_02_01_BATCH$BATCH_SIZE.out && \
+
+./bin/retailer/retailer_02_01_BATCH > out/retailer_02_01_BATCH$BATCH_SIZE.out && \
 echo "Plan 1 done, starting running Plan 2 ..." && \
+
 ./bin/retailer/retailer_02_02_BATCH > out/retailer_02_02_BATCH$BATCH_SIZE.out && \
 echo "Plan 2 done, starting running Plan 3 ..." && \
+
 ./bin/retailer/retailer_02_03_BATCH > out/retailer_02_03_BATCH$BATCH_SIZE.out && \
 echo "Plan 3 done, all done!"
