@@ -13,7 +13,7 @@ fi
 
 astyle --style=google --indent=spaces=4 --indent-switches --suffix=none cpp/retailer/retailer_01_01.hpp && \
 
-g++ -O0 -Wall -Wno-unused-variable -std=c++17 \
+g++ -O3 -Wall -Wno-unused-variable -std=c++17 \
 -pedantic src/main.cpp \
 -I backend/lib \
 -I src \
@@ -28,7 +28,7 @@ echo "Plan 1 compilation done, starting Compiling Plan 2 ..." && \
 
 astyle --style=google --indent=spaces=4 --indent-switches --suffix=none cpp/retailer/retailer_01_02.hpp && \
 
-g++ -O0 -Wall -Wno-unused-variable -std=c++17 \
+g++ -O3 -Wall -Wno-unused-variable -std=c++17 \
 -pedantic src/main.cpp \
 -I backend/lib \
 -I src \
