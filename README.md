@@ -66,3 +66,25 @@ results returned shall decrease from the first query to the third query. Also no
 - [ ] Give reasoning for the performance difference.
 
 ### Experiment 3:
+
+Consider 3 another queries below($Q_1$, $Q_2$, $Q_3$):
+
+```sql
+SELECT zip, rain, prize, sum(inventoryunits) FROM R GROUP BY zip, rain, prize;
+
+SELECT zip, rain, sum(inventoryunits * prize) FROM R GROUP BY zip, rain;
+
+SELECT zip, sum(inventoryunits) FROM R GROUP BY zip;
+```
+Like what we did in Experiment 02, there are 3 query plans that can maintain all the queries. However, if we take a close
+look at the 1st plan(03_01), we see that the top view may not directly borrow the delta view from the previous one. Instead,
+we may need to carry on the sum(units) information along with the sum(units * price) result to the upper view. This requires
+us to make a "bigger" ring for the operation. 
+
+#### TODO:
+- [ ] Implement the first plan as 03_01.
+- [ ] Implement the second plan as 03_02.
+- [ ] Implement the third plan as 03_03.
+- [ ] Compare the performance of the three plans.
+- [ ] Give reasoning for the performance difference.
+- 
