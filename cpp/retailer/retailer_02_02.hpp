@@ -467,9 +467,11 @@ struct data_t : tlq_t {
         long batchSize = std::distance(begin, end);
 
         tN += batchSize;
+        int total_hash_hits = 0;
         dV1_R.clear();
         {
             //foreach
+            int hash_hits = 0, hash_misses = 0;
             for (std::vector<DELTA_R_entry>::iterator e1 = begin; e1 != end; e1++) {
                 int locn = e1->locn;
                 int ksn = e1->ksn;
@@ -480,51 +482,90 @@ struct data_t : tlq_t {
                 DOUBLE_TYPE prize = e1->prize;
                 int inventoryunits = e1->inventoryunits;
                 long v1 = e1->__av;
-                dV1_R.addOrDelOnZero(se1.modify(locn, dateid, ksn, rain), (v1 * Ulift(inventoryunits)));
+                auto se1_pointer = se1.modify(locn, dateid, ksn, rain);
+                if (dV1_R.get(se1_pointer) != nullptr) {
+                    hash_hits++;
+                } else {
+                    hash_misses++;
+                }
+                dV1_R.addOrDelOnZero(se1_pointer, (v1 * Ulift(inventoryunits)));
             }
+            total_hash_hits += hash_hits;
+            std::cout << "\nHash hits in dR --> dV1_R: " << hash_hits << std::endl;
         }
 
         {
             //foreach
             dV1_R_entry* e2 = dV1_R.head;
+            int e2_size = 0;
+            int hash_hits = 0, hash_misses = 0;
             while (e2) {
+                e2_size++;
                 int locn = e2->locn;
                 int dateid = e2->dateid;
                 int ksn = e2->ksn;
                 int8_t rain = e2->rain;
                 RingSum& v2 = e2->__av;
+                auto se2_pointer = se2.modify(locn, dateid, ksn, rain);
+                if (V1_R.get(se2_pointer) != nullptr) {
+                    hash_hits++;
+                } else {
+                    hash_misses++;
+                }
                 V1_R.addOrDelOnZero(se2.modify(locn, dateid, ksn, rain), v2);
                 e2 = e2->nxt;
             }
+            total_hash_hits += hash_hits;
+            std::cout << "dV1_R size: " << e2_size << std::endl;
+            std::cout << "Hash hits in dV1_R --> V1_R: " << hash_hits << std::endl;
         }
 
         {
             //foreach
             dV1_R_entry* e3 = dV1_R.head;
+            int hash_hits = 0, hash_misses = 0;
             while (e3) {
                 int locn = e3->locn;
                 int dateid = e3->dateid;
                 int ksn = e3->ksn;
                 int8_t rain = e3->rain;
                 RingSum& v3 = e3->__av;
-                V2_R.addOrDelOnZero(se3.modify(locn, dateid), (v3 * c1));
+                auto se3_pointer = se3.modify(locn, dateid);
+                if (V2_R.get(se3_pointer) != nullptr) {
+                    hash_hits++;
+                } else {
+                    hash_misses++;
+                }
+                V2_R.addOrDelOnZero(se3_pointer, (v3 * c1));
                 e3 = e3->nxt;
             }
+            total_hash_hits += hash_hits;
+            std::cout << "Hash hits in dV1_R --> V2_R: " << hash_hits << std::endl;
         }
 
         {
             //foreach
             dV1_R_entry* e4 = dV1_R.head;
+            int hash_hits = 0, hash_misses = 0;
             while (e4) {
                 int locn = e4->locn;
                 int dateid = e4->dateid;
                 int ksn = e4->ksn;
                 int8_t rain = e4->rain;
                 RingSum& v4 = e4->__av;
-                V3_R.addOrDelOnZero(se4.modify(locn), (v4 * c1));
+                auto se4_pointer = se4.modify(locn);
+                if (V3_R.get(se4_pointer) != nullptr) {
+                    hash_hits++;
+                } else {
+                    hash_misses++;
+                }
+                V3_R.addOrDelOnZero(se4_pointer, (v4 * c1));
                 e4 = e4->nxt;
             }
+            total_hash_hits += hash_hits;
+            std::cout << "Hash hits in dV1_R --> V3_R: " << hash_hits << std::endl;
         }
+        std::cout << "----------\nTotal hash hits in this Round: " << total_hash_hits << "\n----------" << std::endl;
     }
 
 
