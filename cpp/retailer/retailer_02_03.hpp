@@ -467,8 +467,10 @@ struct data_t : tlq_t {
         long batchSize = std::distance(begin, end);
 
         tN += batchSize;
+        int total_hash_hits = 0;
         {
             //foreach
+            int hash_hits = 0;
             for (std::vector<DELTA_R_entry>::iterator e1 = begin; e1 != end; e1++) {
                 int locn = e1->locn;
                 int ksn = e1->ksn;
@@ -479,13 +481,65 @@ struct data_t : tlq_t {
                 DOUBLE_TYPE prize = e1->prize;
                 int inventoryunits = e1->inventoryunits;
                 long v1 = e1->__av;
-                RingSum c = Ulift(inventoryunits);
-                V1_R.addOrDelOnZero(se1.modify(locn, dateid, ksn, rain), (v1 * c));
-                V2_R.addOrDelOnZero(se2.modify(locn, dateid), (v1 * c));
-                V3_R.addOrDelOnZero(se3.modify(locn), (v1 * c));
+                auto se1_pointer = se1.modify(locn, dateid, ksn, rain);
+                if (V1_R.get(se1_pointer) != nullptr) {
+                    hash_hits ++;
+                }
+                V1_R.addOrDelOnZero(se1_pointer, (v1 * Ulift(inventoryunits)));
             }
+            total_hash_hits += hash_hits;
+            std::cout << "\nHash hits for V1_R: " << hash_hits << std::endl;
+            std::cout << "The size of V1_R now is: " << V1_R.count() << std::endl;
         }
 
+        {
+            //foreach
+            int hash_hits = 0;
+            for (std::vector<DELTA_R_entry>::iterator e2 = begin; e2 != end; e2++) {
+                int locn = e2->locn;
+                int ksn = e2->ksn;
+                int dateid = e2->dateid;
+                int zip = e2->zip;
+                int households = e2->households;
+                int8_t rain = e2->rain;
+                DOUBLE_TYPE prize = e2->prize;
+                int inventoryunits = e2->inventoryunits;
+                long v2 = e2->__av;
+                auto se2_pointer = se2.modify(locn, dateid);
+                if (V2_R.get(se2_pointer) != nullptr) {
+                    hash_hits ++;
+                }
+                V2_R.addOrDelOnZero(se2_pointer, (v2 * Ulift(inventoryunits)));
+            }
+            total_hash_hits += hash_hits;
+            std::cout << "Hash hits for V2_R: " << hash_hits << std::endl;
+            std::cout << "The size of V2_R now is: " << V2_R.count() << std::endl;
+        }
+
+        {
+            //foreach
+            int hash_hits = 0;
+            for (std::vector<DELTA_R_entry>::iterator e3 = begin; e3 != end; e3++) {
+                int locn = e3->locn;
+                int ksn = e3->ksn;
+                int dateid = e3->dateid;
+                int zip = e3->zip;
+                int households = e3->households;
+                int8_t rain = e3->rain;
+                DOUBLE_TYPE prize = e3->prize;
+                int inventoryunits = e3->inventoryunits;
+                long v3 = e3->__av;
+                auto se3_pointer = se3.modify(locn);
+                if (V3_R.get(se3_pointer) != nullptr) {
+                    hash_hits ++;
+                }
+                V3_R.addOrDelOnZero(se3_pointer, (v3 * Ulift(inventoryunits)));
+            }
+            total_hash_hits += hash_hits;
+            std::cout << "Hash hits for V3_R: " << hash_hits << std::endl;
+            std::cout << "The size of V3_R now is: " << V3_R.count() << std::endl;
+            std::cout << "----------\nTotal hash hits in this Round: " << total_hash_hits << "\n----------" << std::endl;
+        }
     }
 
 

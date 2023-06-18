@@ -491,7 +491,8 @@ struct data_t : tlq_t {
                 dV1_R.addOrDelOnZero(se1_pointer, (v1 * Ulift(inventoryunits)));
             }
             total_hash_hits += hash_hits;
-            std::cout << "\nHash hits in dR --> dV1_R: " << hash_hits << std::endl;
+            std::cout << "\nHash hits during dR --> dV1_R: " << hash_hits << std::endl;
+            std::cout << "Hash misses during dR --> dV1_R: " << hash_misses << std::endl;
         }
 
         {
@@ -517,7 +518,8 @@ struct data_t : tlq_t {
             }
             total_hash_hits += hash_hits;
             std::cout << "dV1_R size: " << e2_size << std::endl;
-            std::cout << "Hash hits in dV1_R --> V1_R: " << hash_hits << std::endl;
+            std::cout << "Hash hits during dV1_R --> V1_R: " << hash_hits << std::endl;
+            std::cout << "Hash misses during dV1_R --> V1_R: " << hash_misses << std::endl;
         }
 
         {
@@ -540,7 +542,8 @@ struct data_t : tlq_t {
                 e3 = e3->nxt;
             }
             total_hash_hits += hash_hits;
-            std::cout << "Hash hits in dV1_R --> V2_R: " << hash_hits << std::endl;
+            std::cout << "Hash hits during dV1_R --> V2_R: " << hash_hits << std::endl;
+            std::cout << "Hash misses during dV1_R --> V2_R: " << hash_misses << std::endl;
         }
 
         {
@@ -563,7 +566,8 @@ struct data_t : tlq_t {
                 e4 = e4->nxt;
             }
             total_hash_hits += hash_hits;
-            std::cout << "Hash hits in dV1_R --> V3_R: " << hash_hits << std::endl;
+            std::cout << "Hash hits during dV1_R --> V3_R: " << hash_hits << std::endl;
+            std::cout << "Hash misses during dV1_R --> V3_R: " << hash_misses << std::endl;
         }
         std::cout << "----------\nTotal hash hits in this Round: " << total_hash_hits << "\n----------" << std::endl;
     }

@@ -548,7 +548,7 @@ struct data_t : tlq_t {
                 dV1_R.addOrDelOnZero(se1_pointer, (v1 * Ulift(inventoryunits)));
             }
             total_hash_hits += hash_hits;
-            std::cout << "\nHash hits in dR --> dV1_R: " << hash_hits << std::endl;
+            std::cout << "\nHash hits during dR --> dV1_R: " << hash_hits << std::endl;
             std::cout << "Hash misses during dR --> dV1_R: " << hash_misses << std::endl;
         }
 
@@ -603,6 +603,7 @@ struct data_t : tlq_t {
             total_hash_hits += hash_hits;
             std::cout << "Hash hits during dV1_R --> V1_R: " << hash_hits << std::endl;
             std::cout << "Hash misses during dV1_R --> V1_R: " << hash_misses << std::endl;
+            std::cout << "Now the size of V1_R is: " << V1_R.count() << std::endl;
         }
 
         {
@@ -628,6 +629,7 @@ struct data_t : tlq_t {
             std::cout << "dV2_R size: " << e4_size << std::endl;
             std::cout << "Hash hits during dV2_R --> V2_R: " << hash_hits << std::endl;
             std::cout << "Hash misses during dV2_R --> V2_R: " << hash_misses << std::endl;
+            std::cout << "Now the size of V2_R is: " << V2_R.count() << std::endl;
         }
 
         {
@@ -651,6 +653,7 @@ struct data_t : tlq_t {
             std::cout << "V3_R size: " << V3_R.count() << std::endl;
             std::cout << "Hash hits during dV2_R --> V3_R: " << hash_hits << std::endl;
             std::cout << "Hash misses during dV2_R --> V3_R: " << hash_misses << std::endl;
+            std::cout << "Now the size of V3_R is:" << V3_R.count() << std::endl;
         }
         std::cout << "----------\nTotal hash hits in this Round: " << total_hash_hits << "\n----------" << std::endl;
     }
