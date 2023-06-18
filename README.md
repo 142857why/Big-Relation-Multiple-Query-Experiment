@@ -87,7 +87,7 @@ or not.
 - [ ] Compare the performance of the three plans.
 - [ ] Give reasoning for the performance difference.
 
-### Experiment 3:
+### Experiment 4:
 
 Consider 3 another queries below($Q_1$, $Q_2$, $Q_3$):
 
