@@ -9,6 +9,8 @@
 
 #include "ring/ring_sum.hpp"
 
+#include <chrono>
+
 #define RELATION_R_DYNAMIC
 
 namespace dbtoaster {
@@ -362,7 +364,11 @@ struct data_t : tlq_t {
         tN += batchSize;
         {
             //foreach
+            std::chrono::duration<double, std::milli> t_getKV_total(0);
+            std::chrono::duration<double, std::milli> t_update_delta(0);
+            std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
             for (std::vector<DELTA_R_entry>::iterator e1 = begin; e1 != end; e1++) {
+                std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
                 int locn = e1->locn;
                 int ksn = e1->ksn;
                 int dateid = e1->dateid;
@@ -372,13 +378,28 @@ struct data_t : tlq_t {
                 DOUBLE_TYPE prize = e1->prize;
                 int inventoryunits = e1->inventoryunits;
                 long v1 = e1->__av;
+                std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();
+                t_getKV_total += t4 - t3;
+                std::chrono::high_resolution_clock::time_point t5 = std::chrono::high_resolution_clock::now();
                 V1_R.addOrDelOnZero(se1.modify(locn, dateid, ksn), (v1 * Ulift(inventoryunits)));
+                std::chrono::high_resolution_clock::time_point t6 = std::chrono::high_resolution_clock::now();
+                t_update_delta += t6 - t5;
             }
+            std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> t_scan_total = t2 - t1;
+            std::cout << "\n----------\n1. R total scan time in e1: " << t_scan_total.count() << std::endl;
+            std::cout << "1. R getKV time in e1: " << t_getKV_total.count() << std::endl;
+            std::cout << "1. R update delta time in e1: " << t_update_delta.count() << std::endl;
+
         }
 
         {
             //foreach
+            std::chrono::duration<double, std::milli> t_getKV_total(0);
+            std::chrono::duration<double, std::milli> t_update_delta(0);
+            std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
             for (std::vector<DELTA_R_entry>::iterator e2 = begin; e2 != end; e2++) {
+                std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
                 int locn = e2->locn;
                 int ksn = e2->ksn;
                 int dateid = e2->dateid;
@@ -388,8 +409,19 @@ struct data_t : tlq_t {
                 DOUBLE_TYPE prize = e2->prize;
                 int inventoryunits = e2->inventoryunits;
                 long v2 = e2->__av;
+                std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();
+                t_getKV_total += t4 - t3;
+                std::chrono::high_resolution_clock::time_point t5 = std::chrono::high_resolution_clock::now();
                 V2_R.addOrDelOnZero(se2.modify(locn, dateid, ksn, rain, households), (v2 * Ulift(inventoryunits)));
+                std::chrono::high_resolution_clock::time_point t6 = std::chrono::high_resolution_clock::now();
+                t_update_delta += t6 - t5;
             }
+            std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> t_scan_total = t2 - t1;
+            std::cout << "2. R total scan time in e2: " << t_scan_total.count() << std::endl;
+            std::cout << "2. R getKV time in e2: " << t_getKV_total.count() << std::endl;
+            std::cout << "2. R update delta time in e2: " << t_update_delta.count() << std::endl;
+            std::cout << "----------\n";
         }
     }
 

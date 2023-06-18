@@ -8,7 +8,7 @@
 #include "serialization.hpp"
 
 #include "ring/ring_sum.hpp"
-
+#include <chrono>
 #define RELATION_R_DYNAMIC
 
 namespace dbtoaster {
@@ -441,7 +441,11 @@ struct data_t : tlq_t {
         dV2_R.clear();
         {
             //foreach
+            std::chrono::duration<double, std::milli> t_getKV_total(0);
+            std::chrono::duration<double, std::milli> t_update_total(0);
+            std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
             for (std::vector<DELTA_R_entry>::iterator e1 = begin; e1 != end; e1++) {
+                std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
                 int locn = e1->locn;
                 int zip = e1->ksn;
                 int dateid = e1->dateid;
@@ -451,38 +455,78 @@ struct data_t : tlq_t {
                 DOUBLE_TYPE prize = e1->prize;
                 int inventoryunits = e1->inventoryunits;
                 long v1 = e1->__av;
+                std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();
+                t_getKV_total += t4 - t3;
+                std::chrono::high_resolution_clock::time_point t5 = std::chrono::high_resolution_clock::now();
                 dV2_R.addOrDelOnZero(se1.modify(locn, dateid, ksn, rain, households), (v1 * Ulift(inventoryunits)));
+                std::chrono::high_resolution_clock::time_point t6 = std::chrono::high_resolution_clock::now();
+                t_update_total += t6 - t5;
             }
+            std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> t_total_scan = t2 - t1;
+            std::cout << "\n--------\n1. Total delta R scan time: " << t_total_scan.count() << " ms" << std::endl;
+            std::cout << "1. Total getKV time in dR: " << t_getKV_total.count() << " ms" << std::endl;
+            std::cout << "1. Total update time for creating dV: " << t_update_total.count() << " ms" << std::endl;
+
         }
 
         {
             //foreach
             dV2_R_entry* e2 = dV2_R.head;
+            std::chrono::duration<double, std::milli> t_getKV_total(0);
+            std::chrono::duration<double, std::milli> t_update_total(0);
+            std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
             while (e2) {
+                std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
                 int locn = e2->locn;
                 int dateid = e2->dateid;
                 int ksn = e2->ksn;
                 int8_t rain = e2->rain;
                 int households = e2->households;
                 RingSum& v2 = e2->__av;
+                std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();
+                t_getKV_total += t4 - t3;
+                std::chrono::high_resolution_clock::time_point t5 = std::chrono::high_resolution_clock::now();
                 V2_R.addOrDelOnZero(se2.modify(locn, dateid, ksn, rain, households), v2);
+                std::chrono::high_resolution_clock::time_point t6 = std::chrono::high_resolution_clock::now();
+                t_update_total += t6 - t5;
                 e2 = e2->nxt;
             }
+            std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> t_total_scan = t2 - t1;
+            std::cout << "2. Total dV scan time: " << t_total_scan.count() << " ms" << std::endl;
+            std::cout << "2. Total getKV time in dV: " << t_getKV_total.count() << " ms" << std::endl;
+            std::cout << "2. Total moving time from dV--->V2: " << t_update_total.count() << " ms" << std::endl;
         }
 
         {
             //foreach
             dV2_R_entry* e3 = dV2_R.head;
+            std::chrono::duration<double, std::milli> t_getKV_total(0);
+            std::chrono::duration<double, std::milli> t_update_total(0);
+            std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
             while (e3) {
+                std::chrono::high_resolution_clock::time_point t3 = std::chrono::high_resolution_clock::now();
                 int locn = e3->locn;
                 int dateid = e3->dateid;
                 int ksn = e3->ksn;
                 int8_t rain = e3->rain;
                 int households = e3->households;
                 RingSum& v3 = e3->__av;
+                std::chrono::high_resolution_clock::time_point t4 = std::chrono::high_resolution_clock::now();
+                t_getKV_total += t4 - t3;
+                std::chrono::high_resolution_clock::time_point t5 = std::chrono::high_resolution_clock::now();
                 V1_R.addOrDelOnZero(se3.modify(locn, dateid, ksn), (v3 * c1));
+                std::chrono::high_resolution_clock::time_point t6 = std::chrono::high_resolution_clock::now();
+                t_update_total += t6 - t5;
                 e3 = e3->nxt;
             }
+            std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double, std::milli> t_total_scan = t2 - t1;
+            std::cout << "3. Total dV scan time: " << t_total_scan.count() << " ms" << std::endl;
+            std::cout << "3. Total getKV time in dV: " << t_getKV_total.count() << " ms" << std::endl;
+            std::cout << "3. Total computation time from dV--->V1: " << t_update_total.count() << " ms" << std::endl;
+            std::cout << "---------\n";
         }
     }
 
