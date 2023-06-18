@@ -148,77 +148,6 @@ typedef MultiHashMap<V1_R_entry, RingSum,
         > V1_R_map;
 
 
-struct dV1_R_entry {
-    int locn;
-    int dateid;
-    int ksn;
-    int8_t rain;
-    RingSum __av;
-    dV1_R_entry* nxt;
-    dV1_R_entry* prv;
-
-    explicit dV1_R_entry() : nxt(nullptr), prv(nullptr) { }
-    explicit dV1_R_entry(const int c0, const int c1, const int c2, const int8_t c3, const RingSum& c4) {
-        locn = c0;
-        dateid = c1;
-        ksn = c2;
-        rain = c3;
-        __av = c4;
-    }
-    dV1_R_entry(const dV1_R_entry& other) : locn(other.locn), dateid(other.dateid), ksn(other.ksn), rain(other.rain), __av(other.__av), nxt(nullptr), prv(nullptr) { }
-    dV1_R_entry(const std::vector<std::string>& f, const RingSum& v) {
-        /* if (f.size() < 4) return; */
-        locn = std::stoi(f[0]);
-        dateid = std::stoi(f[1]);
-        ksn = std::stoi(f[2]);
-        rain = (int8_t) std::stoi(f[3]);
-        __av = v;
-        nxt = nullptr;
-        prv = nullptr;
-    }
-
-    FORCE_INLINE dV1_R_entry& modify(const int c0, const int c1, const int c2, const int8_t c3) {
-        locn = c0;
-        dateid = c1;
-        ksn = c2;
-        rain = c3;
-        return *this;
-    }
-    template<class Archive>
-    void serialize(Archive& ar, const unsigned int version) const {
-        ar << ELEM_SEPARATOR;
-        DBT_SERIALIZATION_NVP(ar, locn);
-        ar << ELEM_SEPARATOR;
-        DBT_SERIALIZATION_NVP(ar, dateid);
-        ar << ELEM_SEPARATOR;
-        DBT_SERIALIZATION_NVP(ar, ksn);
-        ar << ELEM_SEPARATOR;
-        DBT_SERIALIZATION_NVP(ar, rain);
-        ar << ELEM_SEPARATOR;
-        DBT_SERIALIZATION_NVP(ar, __av);
-    }
-};
-
-struct dV1_R_mapkey0123_idxfn {
-    FORCE_INLINE static size_t hash(const dV1_R_entry& e) {
-        size_t h = 0;
-        hash_combine(h, e.locn);
-        hash_combine(h, e.dateid);
-        hash_combine(h, e.ksn);
-        hash_combine(h, e.rain);
-        return h;
-    }
-
-    FORCE_INLINE static bool equals(const dV1_R_entry& x, const dV1_R_entry& y) {
-        return x.locn == y.locn && x.dateid == y.dateid && x.ksn == y.ksn && x.rain == y.rain;
-    }
-};
-
-typedef MultiHashMap<dV1_R_entry, RingSum,
-        PrimaryHashIndex<dV1_R_entry, dV1_R_mapkey0123_idxfn>
-        > dV1_R_map;
-
-
 struct V2_R_entry {
     int locn;
     int dateid;
@@ -558,7 +487,6 @@ struct data_t : tlq_t {
 
     /* Data structures used for storing materialized views */
     V1_R_map V1_R;
-    dV1_R_map dV1_R;
     V2_R_map V2_R;
     V3_R_map V3_R;
     DELTA_R_map DELTA_R;

@@ -12,7 +12,6 @@ CREATE STREAM R(
 FROM FILE 'R.tbl' LINE DELIMITED CSV (delimiter := ',');
 
 DECLARE MAP V1_R(RingSum)[][locn: int, dateid: int, ksn: int, rain:byte];
-DECLARE MAP dV1_R(RingSum)[][locn: int, dateid: int, ksn: int, rain: byte];
 DECLARE MAP V2_R(RingSum)[][locn: int, dateid: int];
 DECLARE MAP V3_R(RingSum)[][locn: int];
 
