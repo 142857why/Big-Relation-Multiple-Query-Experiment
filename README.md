@@ -81,9 +81,9 @@ size of each view shrink very quickly! It's a good example to test whether our e
 or not.
 
 #### TODO:
-- [ ] Implement the first plan as 03_01.
-- [ ] Implement the second plan as 03_02.
-- [ ] Implement the third plan as 03_03.
+- [x] Implement the first plan as 03_01.
+- [x] Implement the second plan as 03_02.
+- [x] Implement the third plan as 03_03.
 - [ ] Compare the performance of the three plans.
 - [ ] Give reasoning for the performance difference.
 
