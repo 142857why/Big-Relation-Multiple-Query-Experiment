@@ -454,8 +454,10 @@ struct data_t : tlq_t {
 
         tN += batchSize;
         dV1_R.clear();
+        int total_hash_hits = 0;
         {
             //foreach
+            int hash_hits = 0, hash_misses = 0;
             for (std::vector<DELTA_R_entry>::iterator e1 = begin; e1 != end; e1++) {
                 int locn = e1->locn;
                 int ksn = e1->ksn;
@@ -466,48 +468,91 @@ struct data_t : tlq_t {
                 DOUBLE_TYPE prize = e1->prize;
                 int inventoryunits = e1->inventoryunits;
                 long v1 = e1->__av;
-                dV1_R.addOrDelOnZero(se1.modify(zip, rain, prize), (v1 * Ulift(inventoryunits)));
+                auto se1_pointer = se1.modify(zip, rain, prize);
+                if (dV1_R.get(se1_pointer) != nullptr) {
+                    hash_hits++;
+                } else {
+                    hash_misses++;
+                }
+                dV1_R.addOrDelOnZero(se1_pointer, (v1 * Ulift(inventoryunits)));
             }
+            total_hash_hits += hash_hits;
+            std::cout << "\nHash hits during dR --> dV1_R: " << hash_hits << std::endl;
+            std::cout << "Hash misses during dR --> dV1_R: " << hash_misses << std::endl;
         }
 
         {
             //foreach
             dV1_R_entry* e2 = dV1_R.head;
+            int e2_size = 0;
+            int hash_hits = 0, hash_misses = 0;
             while (e2) {
+                e2_size++;
                 int zip = e2->zip;
                 int8_t rain = e2->rain;
                 DOUBLE_TYPE prize = e2->prize;
                 RingSum& v2 = e2->__av;
-                V1_R.addOrDelOnZero(se2.modify(zip, rain, prize), v2);
+                auto se2_pointer = se2.modify(zip, rain, prize);
+                if (V1_R.get(se2_pointer) != nullptr) {
+                    hash_hits++;
+                } else {
+                    hash_misses++;
+                }
+                V1_R.addOrDelOnZero(se2_pointer, v2);
                 e2 = e2->nxt;
             }
+            total_hash_hits += hash_hits;
+            std::cout << "dV1_R size: " << e2_size << std::endl;
+            std::cout << "Hash hits during dV1_R --> V1_R: " << hash_hits << std::endl;
+            std::cout << "Hash misses during dV1_R --> V1_R: " << hash_misses << std::endl;
         }
 
         {
             //foreach
             dV1_R_entry* e3 = dV1_R.head;
+            int hash_hits = 0, hash_misses = 0;
             while (e3) {
                 int zip = e3->zip;
                 int8_t rain = e3->rain;
                 DOUBLE_TYPE prize = e3->prize;
-                RingSum& v3 = e3->__av;
-                V2_R.addOrDelOnZero(se3.modify(zip, rain), (v3 * c1));
+                RingSum &v3 = e3->__av;
+                auto se3_pointer = se3.modify(zip, rain);
+                if (V2_R.get(se3_pointer) != nullptr) {
+                    hash_hits++;
+                } else {
+                    hash_misses++;
+                }
+                V2_R.addOrDelOnZero(se3_pointer, (v3 * c1));
                 e3 = e3->nxt;
             }
+            total_hash_hits += hash_hits;
+            std::cout << "Hash hits during dV1_R --> V2_R: " << hash_hits << std::endl;
+            std::cout << "Hash misses during dV1_R --> V2_R: " << hash_misses << std::endl;
         }
 
         {
             //foreach
             dV1_R_entry* e4 = dV1_R.head;
+            int hash_hits = 0, hash_misses = 0;
             while (e4) {
                 int zip = e4->zip;
                 int8_t rain = e4->rain;
                 DOUBLE_TYPE prize = e4->prize;
                 RingSum& v4 = e4->__av;
-                V3_R.addOrDelOnZero(se4.modify(zip), (v4 * c1));
+                auto se4_pointer = se4.modify(zip);
+                if (V3_R.get(se4_pointer) != nullptr) {
+                    hash_hits++;
+                } else {
+                    hash_misses++;
+                }
+                V3_R.addOrDelOnZero(se4_pointer, (v4 * c1));
                 e4 = e4->nxt;
             }
+            total_hash_hits += hash_hits;
+            std::cout << "Hash hits during dV1_R --> V3_R: " << hash_hits << std::endl;
+            std::cout << "Hash misses during dV1_R --> V3_R: " << hash_misses << std::endl;
         }
+        std::cout << "----------\nTotal hash hits in this Round: " << total_hash_hits << "\n----------" << std::endl;
     }
 
 
