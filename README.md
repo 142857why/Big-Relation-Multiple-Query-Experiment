@@ -72,14 +72,13 @@ Consider 3 another queries below($Q_1$, $Q_2$, $Q_3$):
 ```sql
 SELECT zip, rain, prize, sum(inventoryunits) FROM R GROUP BY zip, rain, prize;
 
-SELECT zip, rain, sum(inventoryunits * prize) FROM R GROUP BY zip, rain;
+SELECT zip, rain, sum(inventoryunits) FROM R GROUP BY zip, rain;
 
 SELECT zip, sum(inventoryunits) FROM R GROUP BY zip;
 ```
-Like what we did in Experiment 02, there are 3 query plans that can maintain all the queries. However, if we take a close
-look at the 1st plan(03_01), we see that the top view may not directly borrow the delta view from the previous one. Instead,
-we may need to carry on the sum(units) information along with the sum(units * price) result to the upper view. This requires
-us to make a "bigger" ring for the operation. 
+Like what we did in Experiment 02, there are 3 query plans that can maintain all the queries. The difference is that the
+size of each view shrink very quickly! It's a good example to test whether our estimation during each batch is accurate
+or not.
 
 #### TODO:
 - [ ] Implement the first plan as 03_01.
@@ -87,4 +86,26 @@ us to make a "bigger" ring for the operation.
 - [ ] Implement the third plan as 03_03.
 - [ ] Compare the performance of the three plans.
 - [ ] Give reasoning for the performance difference.
-- 
+
+### Experiment 3:
+
+Consider 3 another queries below($Q_1$, $Q_2$, $Q_3$):
+
+```sql
+SELECT zip, rain, prize, sum(inventoryunits) FROM R GROUP BY zip, rain, prize;
+
+SELECT zip, rain, sum(inventoryunits * prize) FROM R GROUP BY zip, rain;
+
+SELECT zip, sum(inventoryunits) FROM R GROUP BY zip;
+```
+At first glance, it looks quite similar to Experiment 03! However, if we take a close look at the 1st plan(03_01), 
+we see that the top view may not directly borrow the delta view from the previous one. Instead, we may need to carry on 
+the sum(units) information along with the sum(units * price) result to the upper view. This requires us to 
+make a "bigger" ring for the operation. However, this new ring operation might be time-consuming.
+
+#### TODO:
+- [ ] Implement the first plan as 04_01.
+- [ ] Implement the second plan as 04_02.
+- [ ] Implement the third plan as 04_03.
+- [ ] Compare the performance of the three plans.
+- [ ] Give reasoning for the performance difference.
