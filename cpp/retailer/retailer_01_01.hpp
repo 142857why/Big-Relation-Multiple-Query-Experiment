@@ -382,6 +382,7 @@ struct data_t : tlq_t {
                 t_getKV_total += t4 - t3;
                 std::chrono::high_resolution_clock::time_point t5 = std::chrono::high_resolution_clock::now();
                 V1_R.addOrDelOnZero(se1.modify(locn, dateid, ksn), (v1 * Ulift(inventoryunits)));
+                V2_R.addOrDelOnZero(se2.modify(locn, dateid, ksn, rain, households), (v1 * Ulift(inventoryunits)));
                 std::chrono::high_resolution_clock::time_point t6 = std::chrono::high_resolution_clock::now();
                 t_update_delta += t6 - t5;
             }
@@ -390,9 +391,10 @@ struct data_t : tlq_t {
             std::cout << "\n----------\n1. R total scan time in e1: " << t_scan_total.count() << std::endl;
             std::cout << "1. R getKV time in e1: " << t_getKV_total.count() << std::endl;
             std::cout << "1. R update delta time in e1: " << t_update_delta.count() << std::endl;
-
+            std::cout << "1. dR iteration time in e1: " << (t_scan_total.count() - t_getKV_total.count() - t_update_delta.count()) << std::endl;
+            std::cout << "----------\n";
         }
-
+        /*
         {
             //foreach
             std::chrono::duration<double, std::milli> t_getKV_total(0);
@@ -421,8 +423,10 @@ struct data_t : tlq_t {
             std::cout << "2. R total scan time in e2: " << t_scan_total.count() << std::endl;
             std::cout << "2. R getKV time in e2: " << t_getKV_total.count() << std::endl;
             std::cout << "2. R update delta time in e2: " << t_update_delta.count() << std::endl;
+            std::cout << "2. dR iteration time in e2: " << (t_scan_total.count() - t_getKV_total.count() - t_update_delta.count()) << std::endl;
             std::cout << "----------\n";
         }
+        */
     }
 
 
